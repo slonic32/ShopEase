@@ -1,0 +1,41 @@
+name: Integration and Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install build dependencies
+      run: sudo apt-get install build-essential
+
+    - name: Compile C files
+      run: gcc -o ShopEase *.c
+
+    - name: Zip compiled files
+      run: zip -r release.zip ShopEase
+
+    - name: Upload release
+      uses: actions/upload-artifact@v2
+      with:
+        name: release
+        path: release.zip
+
+#  deploy:
+#     runs-on: ubuntu-latest
+#
+#     steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v2
+#
+#      - name: Deploy to Staging server
+#        run: ssh user@staging-server 'cd /var/srv/ShopEase && git pull'
+        
+
